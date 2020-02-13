@@ -68,12 +68,28 @@ router.get('/:id/posts', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, (req, res) => {
   // do your magic!
+  const id = req.params.id;
+  Users.remove(id).then(() => res.status(204)
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: "Error deleting user" });
+    }))
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, (req, res) => {
   // do your magic!
+  const { id } = req.params;
+  const { name } = req.body;
+
+  Users.update(id, { name }).then(() => {
+    Users.getById(id).then(user => res.status(200).json(user))
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ error: "Error getting user" });
+      });
+  }).catch(err => console.log(err));
 });
 
 
