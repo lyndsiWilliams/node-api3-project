@@ -1,16 +1,19 @@
 const express = require('express');
 
+const userRouter = require('./users/userRouter.js');
+
 const server = express();
 
 
 // middleware usage
 server.use(express.json());
 server.use(logger);
+server.use('/user', userRouter)
 
 
-// routes
+// routes - DO NOT USE <h2> (or tags or anything like it)
 server.get('/', (req, res) => {
-  res.send(`<h2>Let's write some middleware!</h2>`);
+  res.send(`Let's write some middleware!`);
 });
 
 

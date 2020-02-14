@@ -30,6 +30,7 @@ router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   });
 });
 
+// GET users
 router.get('/', (req, res) => {
   // do your magic!
   Users.get(req.query).then(users => {
@@ -40,6 +41,7 @@ router.get('/', (req, res) => {
   });
 });
 
+// GET users by id
 router.get('/:id', validateUserId, (req, res) => {
   // do your magic!
   const id = req.params.id;
@@ -68,16 +70,18 @@ router.get('/:id/posts', (req, res) => {
   });
 });
 
+// DELETE user
 router.delete('/:id', validateUserId, (req, res) => {
   // do your magic!
   const id = req.params.id;
-  Users.remove(id).then(() => res.status(204)
+  Users.remove(id).then(() => res.status(204))
     .catch(err => {
       console.log(err);
       res.status(500).json({ errorMessage: "Error deleting user" });
-    }))
+    })
 });
 
+// UPDATE user
 router.put('/:id', validateUserId, (req, res) => {
   // do your magic!
   const { id } = req.params;
@@ -99,6 +103,7 @@ router.put('/:id', validateUserId, (req, res) => {
 function validateUserId(req, res, next) {
   // do your magic!
   const { id } = req.params;
+
   Users.getById(id).then(user => {
     if (user) {
       req.user = user;
@@ -113,6 +118,7 @@ function validateUserId(req, res, next) {
 function validateUser(req, res, next) {
   // do your magic!
   const { name } = req.body;
+
   if (!name) {
     res.status(400).json({ error: "Name required" });
   } else if (typeof name != "string") {
